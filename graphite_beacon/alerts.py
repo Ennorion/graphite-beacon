@@ -154,7 +154,7 @@ class BaseAlert(_.with_metaclass(AlertFabric)):
         It will repeat notification if a metric is still failed.
         """
         for target in self.state:
-            self.state[target] = "normal"
+            self.state[target] = None
 
     def start(self):
         """Start checking."""
@@ -278,7 +278,6 @@ class GraphiteAlert(BaseAlert):
                 if len(data) == 0:
                     raise ValueError('No data')
                 self.check(data)
-                self.notify('normal', 'Metrics are loaded', target='loading', ntype='common')
             except Exception as e:
                 self.notify(
                     self.loading_error, 'Loading error: %s' % e, target='loading', ntype='common')
@@ -329,7 +328,6 @@ class URLAlert(BaseAlert):
                     connect_timeout=self.connect_timeout,
                     validate_cert=self.options.get('validate_cert', True))
                 self.check([(self.get_data(response), self.query)])
-                self.notify('normal', 'Metrics are loaded', target='loading', ntype='common')
 
             except Exception as e:
                 self.notify('critical', str(e), target='loading', ntype='common')
