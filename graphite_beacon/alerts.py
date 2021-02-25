@@ -178,6 +178,7 @@ class BaseAlert(_.with_metaclass(AlertFabric)):
                     break
             else:
                 self.notify('normal', value, target, rule=rule)
+            self.notify(rule['level'], value, target, rule=rule)
 
             self.history[target].append(value)
 
@@ -214,15 +215,6 @@ class BaseAlert(_.with_metaclass(AlertFabric)):
 
     def notify(self, level, value, target=None, ntype=None, rule=None):
         """Notify main reactor about event."""
-        # Did we see the event before?
-        if target in self.state and level == self.state[target]:
-            return False
-
-        # Do we see the event first time?
-        if target not in self.state and level == 'normal' \
-                and not self.reactor.options['send_initial']:
-            return False
-
         self.state[target] = level
         return self.reactor.notify(level, self, value, target=target, ntype=ntype, rule=rule)
 
