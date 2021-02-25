@@ -218,11 +218,6 @@ class BaseAlert(_.with_metaclass(AlertFabric)):
         if target in self.state and level == self.state[target]:
             return False
 
-        # Do we see the event first time?
-        if target not in self.state and level == 'normal' \
-                and not self.reactor.options['send_initial']:
-            return False
-
         self.state[target] = level
         return self.reactor.notify(level, self, value, target=target, ntype=ntype, rule=rule)
 
