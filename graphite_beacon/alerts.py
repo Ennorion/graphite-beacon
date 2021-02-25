@@ -251,8 +251,9 @@ class GraphiteAlert(BaseAlert):
         self.auth_password = self.reactor.options.get('auth_password')
         self.validate_cert = self.reactor.options.get('validate_cert', True)
 
+        self.url_raw = options.get('graphite_url', self.reactor.options['graphite_url'])
         self.url = self._graphite_url(
-            self.query, graphite_url=self.reactor.options.get('graphite_url'), raw_data=True)
+            self.query, graphite_url=self.url_raw, raw_data=True)
         LOGGER.debug('%s: url = %s', self.name, self.url)
 
     @gen.coroutine
