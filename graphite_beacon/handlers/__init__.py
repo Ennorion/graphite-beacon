@@ -66,3 +66,4 @@ from .cli import CliHandler              # pylint: disable=wrong-import-position
 from .opsgenie import OpsgenieHandler    # pylint: disable=wrong-import-position
 from .victorops import VictorOpsHandler  # pylint: disable=wrong-import-position
 from .telegram import TelegramHandler    # pylint: disable=wrong-import-position
+from .sensu import SensuHandler          # pylint: disable=wrong-import-position
