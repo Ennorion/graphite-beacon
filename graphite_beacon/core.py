@@ -178,7 +178,6 @@ class Reactor(object):
         if ntype is None:
             ntype = alert.source
 
-
         for handler in self.handlers.get(level, []):
             handler.notify(level, alert, value, target=target, ntype=ntype, rule=rule)
 
