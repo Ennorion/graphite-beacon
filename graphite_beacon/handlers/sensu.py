@@ -48,7 +48,8 @@ class SensuHandler(AbstractHandler):
             'output': output.strip(),
             'status': status,
             'handlers': self.handlers,
-            'source': self.source
+            'source': self.source,
+            'ttl': self.ttl
         }
         return json.dumps(message)
 
