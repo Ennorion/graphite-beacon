@@ -4,7 +4,6 @@ import socket
 import time
 
 from graphite_beacon.handlers import LOGGER, AbstractHandler
-from tornado import gen
 
 
 class SensuHandler(AbstractHandler):
