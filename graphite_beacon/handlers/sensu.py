@@ -68,9 +68,10 @@ class SensuHandler(AbstractHandler):
         LOGGER.debug("Handler (%s) %s", self.name, level)
 
         rule = kwargs.get('rule', {})
-        operator = dict(rule.get('exprs', '')[0]).get('op')
-        operator = str(operator).split(' ')[2].rstrip('>')
-        rule_value = dict(rule.get('exprs', '')[0]).get('value')
+        exprs = dict(rule.get('exprs', '')[0])
+        op = exprs.get('op')
+        operator = str(op).split(' ')[2].rstrip('>')
+        rule_value = exprs.get('value')
         status = str(level).upper()
         output = '{0} {1}: {2} [{3}] | {4} {5}'.format(alert, status, value,
                                                        target, operator, rule_value)
