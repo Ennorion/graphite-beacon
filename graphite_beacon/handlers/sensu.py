@@ -64,7 +64,6 @@ class SensuHandler(AbstractHandler):
     def unknown(self, message):
         self.__send(self.__compose(message, self.UNKNOWN))
 
-    @gen.coroutine
     def notify(self, level, alert, value, target=None, **kwargs):
         LOGGER.debug("Handler (%s) %s", self.name, level)
 
