@@ -40,7 +40,6 @@ class SensuHandler(AbstractHandler):
 
     def __compose(self, output, status):
         alert_name = output.rsplit(' ')[0]
-        alert_name = str(alert_name).rsplit(' ', 1)[0].strip()
         message = {
             'name': alert_name,
             'issued': int(time.time()),
@@ -67,14 +66,19 @@ class SensuHandler(AbstractHandler):
     def notify(self, level, alert, value, target=None, **kwargs):
         LOGGER.debug("Handler (%s) %s", self.name, level)
 
-        rule = kwargs.get('rule', {})
-        exprs = dict(rule.get('exprs', '')[0])
-        op = exprs.get('op')
-        operator = str(op).split(' ')[2].rstrip('>')
-        rule_value = exprs.get('value')
         status = str(level).upper()
-        output = '{0} {1}: {2} [{3}] | {4} {5}'.format(alert, status, value,
-                                                       target, operator, rule_value)
+        alert_name = str(alert).rsplit(' ', 1)[0]
+        rule = kwargs.get('rule')
+        if rule is None:
+            output = '{0} {1}: {2} [{3}]'.format(alert_name, status, value, target)
+        else:
+            exprs = rule.get('exprs', [{}])[0]
+            rule_value = exprs.get('value', ' ')
+            op = exprs.get('op', ' ')
+            operator = str(op).split(' ')[2].rstrip('>')
+            output = '{0} {1}: {2} [{3}] | {4} {5}'.format(alert_name, status, value,
+                                                           target, operator, rule_value)
+
         if level == 'critical':
             self.error(output)
         elif level == 'warning':
