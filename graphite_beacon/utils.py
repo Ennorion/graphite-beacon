@@ -53,8 +53,7 @@ RULE_TOKENIZER = make_tokenizer(
         (u'Comparator', (r'({})'.format('|'.join(sorted(COMPARATORS.keys(), reverse=True))),)),
         (u'LogicalOperator', (r'({})'.format('|'.join(LOGICAL_OPERATORS.keys())),)),
         (u'Sep', (r':',)),
-        (u'Operator', (r'(?:\*|\+|-|\/)',)),
-        (u'Number', (r'(\d+\.?\d*)',)),
+        (u'Number', (r'(-?\d+\.?\d*)',)),
         (u'Unit', (r'({})'.format('|'.join(sorted(CONVERT_HASH.keys(), reverse=True))),)),
         (u'Space', (r'\s+',))
     ]
@@ -96,10 +95,9 @@ def _parse_rule(seq):
     number = toktype(u'Number') >> float
     historical = toktype(u'Historical')
     unit = toktype(u'Unit')
-    operator = toktype(u'Operator')
     logical_operator = toktype(u'LogicalOperator') >> LOGICAL_OPERATORS.get
 
-    exp = comparator + ((number + maybe(unit)) | historical) + maybe(operator + number)
+    exp = comparator + ((number + maybe(unit)) | historical) + maybe(number)
     rule = (
         level + s_sep(':') + exp + many(logical_operator + exp)
     )
